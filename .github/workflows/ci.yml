@@ -1,0 +1,40 @@
+name: CodexTrace CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    name: Build and test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore CodexTrace.slnx
+
+      - name: Build
+        run: dotnet build CodexTrace.slnx --no-restore --nologo
+
+      - name: Test
+        run: dotnet test CodexTrace.slnx --no-build --no-restore --nologo
+
+      - name: CLI smoke test
+        run: dotnet run --project src/Idd.Factory.Report --no-build --no-restore -- --help

@@ -1,0 +1,15 @@
+# .NET build/test output
+**/bin/
+**/obj/
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Local reports and IDE settings
+.vs/
+.idea/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
